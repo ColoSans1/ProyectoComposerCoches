@@ -1,0 +1,19 @@
+{
+    "name": "arnaucolominassans/proyecto-composer-coches",
+    "autoload": {
+        "psr-4": {
+            "Arnaucolominassans\\ProyectoComposerCoches\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "ColoSans1",
+            "email": "arnaucolominassans2004@gmail.com"
+        }
+    ],
+    "require": {
+        "monolog/monolog": "^3.8",
+        "intervention/image": "^3.9",
+        "ramsey/uuid": "^4.7"
+    }
+}
