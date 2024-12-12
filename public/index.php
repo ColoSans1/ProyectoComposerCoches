@@ -1,14 +1,20 @@
-<?php
-// Incluir la clase Reparation
-require_once '../src/Reparation.php';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select User Role</title>
+</head>
+<body>
+    <h1>Welcome to the Car Workshop System</h1>
+    <p>Please select your role:</p>
 
-// Usar la clase Reparation
-$reparation = new Reparation(1, '2024-12-11', '1234-XYZ', 'path/to/photo.jpg', '1234-XYZ - REPAIR-ID');
-$id_reparation = $reparation->registerReparation();
+    <form action="landing_page.php" method="POST">
+        <label for="role">Select Role:</label><br>
+        <input type="radio" id="employee" name="role" value="employee" required> Employee<br>
+        <input type="radio" id="client" name="role" value="client" required> Client<br><br>
 
-if ($id_reparation) {
-    echo "Reparación registrada con éxito. ID: " . $id_reparation;
-} else {
-    echo "Error al registrar la reparación.";
-}
-?>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
