@@ -4,20 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reparation Form</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Reparation Form</h1>
-    <form action="../src/Controller/ControllerRepaation.php" method="POST">
-        <label for="car_model">Car Model:</label>
-        <input type="text" id="car_model" name="car_model" required><br><br>
 
-        <label for="issue_description">Issue Description:</label>
-        <textarea id="issue_description" name="issue_description" required></textarea><br><br>
+<div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h1 class="text-center mb-4">Reparation Query</h1>
 
-        <label for="repair_date">Repair Date:</label>
-        <input type="date" id="repair_date" name="repair_date" required><br><br>
+                        <form action="../src/Controller/ControllerRepaation.php" method="POST">
+                            <div class="mb-3">
+                                <label for="reparation_id" class="form-label">Reparation ID:</label>
+                                <input type="text" id="reparation_id" name="reparation_id" class="form-control" required>
+                            </div>
 
-        <button type="submit" name="action" value="insertReparation">Submit</button>
-    </form>
+                            <div class="text-center">
+                                <button type="submit" name="action" value="getReparation" class="btn btn-primary">Search</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h1 class="text-center mb-4">Reparation Form</h1>
+
+                        <form action="../src/Controller/ControllerRepaation.php" method="POST">
+                            <div class="mb-3">
+                                <label for="car_model" class="form-label">Car Model:</label>
+                                <input type="text" id="car_model" name="car_model" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="issue_description" class="form-label">Issue Description:</label>
+                                <textarea id="issue_description" name="issue_description" class="form-control" rows="4" required></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="repair_date" class="form-label">Repair Date:</label>
+                                <input type="date" id="repair_date" name="repair_date" class="form-control" required>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" name="action" value="insertReparation" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

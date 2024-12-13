@@ -3,20 +3,27 @@
 require_once '../Model/Reparation.php';
 
 class ServiceReparation {
-    private $connection;
+    private $connection = null;
 
-    // Function to connect to the database
+    // Constructor para asegurarse de que la conexión esté establecida
+    public function __construct() {
+        if ($this->connection === null) {
+            $this->connect(); // Conexión al crear la instancia.
+        }
+    }
+
+    // Función para conectar a la base de datos
     public function connect() {
-        // Load the database configuration from the .ini file
-        $config = parse_ini_file('../db_config.ini');
+        // Cargar la configuración de la base de datos desde el archivo .ini
+        $config = parse_ini_file(__DIR__ . '/../../db_config.ini');
 
-        // Database connection parameters
+        // Parámetros de conexión a la base de datos
         $servername = $config['servername'];
         $username = $config['username'];
         $password = $config['password'];
         $dbname = $config['dbname'];
 
-        // Create a new PDO connection
+        // Crear una nueva conexión PDO
         try {
             $this->connection = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -26,20 +33,26 @@ class ServiceReparation {
         }
     }
 
-    // Function to insert a reparation record into the database
+    // Función para insertar un registro de reparación en la base de datos
     public function insertReparation($reparation) {
-        if ($this->connection == null) {
-            $this->connect(); // Ensure database connection is established
+        // Validar datos de entrada
+        if (empty($reparation->getLicensePlate())) {
+            $this->log("License plate is required", "ERROR");
+            return false; // Devolver false si falta la matrícula
         }
 
-        // Prepare SQL statement to insert the reparation
+        if ($this->connection === null) {
+            $this->connect(); // Asegurarse de que la conexión esté establecida
+        }
+
+        // Preparar la declaración SQL para insertar la reparación
         $sql = "INSERT INTO reparation (id_workshop, name_workshop, register_date, license_plate, photo_url, watermark_text)
                 VALUES (:id_workshop, :name_workshop, :register_date, :license_plate, :photo_url, :watermark_text)";
         
         try {
             $stmt = $this->connection->prepare($sql);
 
-            // Bind parameters to the SQL query
+            // Vincular los parámetros con la consulta SQL
             $stmt->bindParam(':id_workshop', $reparation->getIdWorkshop());
             $stmt->bindParam(':name_workshop', $reparation->getNameWorkshop());
             $stmt->bindParam(':register_date', $reparation->getRegisterDate());
@@ -47,62 +60,61 @@ class ServiceReparation {
             $stmt->bindParam(':photo_url', $reparation->getPhotoUrl());
             $stmt->bindParam(':watermark_text', $reparation->getWatermarkText());
 
-            // Execute the query
+            // Ejecutar la consulta
             $stmt->execute();
             $this->log("Reparation inserted successfully", "INFO");
-            return true; // Return true if insertion is successful
+            return true; // Devolver true si la inserción es exitosa
         } catch (PDOException $e) {
             $this->log("Error inserting reparation: " . $e->getMessage(), "ERROR");
-            return false; // Return false if an error occurs
+            return false; // Devolver false si ocurre un error
         }
     }
 
-    // Function to get a reparation record from the database by ID
+    // Función para obtener un registro de reparación de la base de datos por ID
     public function getReparation($id_reparation) {
-        if ($this->connection == null) {
-            $this->connect(); // Ensure database connection is established
+        if ($this->connection === null) {
+            $this->connect(); // Asegurarse de que la conexión esté establecida
         }
 
-        // Prepare SQL statement to fetch reparation by ID
+        // Preparar la declaración SQL para obtener la reparación por ID
         $sql = "SELECT * FROM reparation WHERE id_reparation = :id_reparation";
         
         try {
             $stmt = $this->connection->prepare($sql);
 
-            // Bind parameter to the SQL query
+            // Vincular el parámetro con la consulta SQL
             $stmt->bindParam(':id_reparation', $id_reparation);
 
-            // Execute the query
+            // Ejecutar la consulta
             $stmt->execute();
 
-            // Fetch the result as an associative array
+            // Obtener el resultado como un array asociativo
             $reparation = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($reparation) {
                 $this->log("Reparation fetched successfully", "INFO");
-                return $reparation; // Return reparation data if found
+                return $reparation; // Devolver los datos de la reparación si se encuentra
             } else {
                 $this->log("No reparation found with ID: $id_reparation", "WARNING");
-                return null; // Return null if no reparation is found
+                return null; // Devolver null si no se encuentra ninguna reparación
             }
         } catch (PDOException $e) {
             $this->log("Error fetching reparation: " . $e->getMessage(), "ERROR");
-            return null; // Return null if an error occurs
+            return null; // Devolver null si ocurre un error
         }
     }
 
-    // Function to log database operations
-    private function log($message, $level) {
-        // Log the message to a file with the specified log level
-        $logFile = '../logs/app_workshop.log';
+    // Función para registrar las operaciones de la base de datos
+    private function log($message, $level, $logFile = '../logs/app_workshop.log') {
+        // Asegurarse de que el archivo de log esté definido
         $timestamp = date("Y-m-d H:i:s");
         $logMessage = "[$timestamp] [$level] $message\n";
 
-        // Write log message to the file
+        // Escribir el mensaje en el archivo de log
         file_put_contents($logFile, $logMessage, FILE_APPEND);
     }
 
-    // Function to get the last inserted ID for reparation
+    // Función para obtener el último ID insertado de la reparación
     public function getLastInsertId() {
         return $this->connection->lastInsertId();
     }
