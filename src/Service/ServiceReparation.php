@@ -18,7 +18,10 @@ class ServiceReparation {
         $config = parse_ini_file(__DIR__ . '/../../db_config.ini');
         if (!$config) {
             die("Error: No se pudo cargar el archivo de configuración.");
+        } else {
+            print_r($config); 
         }
+        
         
         // Verificar que existan todas las claves necesarias en el archivo de configuración
         if (!isset($config['servername'], $config['username'], $config['password'], $config['dbname'])) {
@@ -40,29 +43,33 @@ class ServiceReparation {
 
     // Inserción de una nueva reparación
     public function insertReparation($reparation) {
-        // Preparar la consulta SQL de inserción
         $sql = "INSERT INTO reparation 
                 (name_workshop, register_date, license_plate, photo_url, watermark_text)
                 VALUES (:name_workshop, :register_date, :license_plate, :photo_url, :watermark_text)";
-
-        // Preparar la sentencia
         $stmt = $this->connection->prepare($sql);
-
-        // Obtener los valores del objeto $reparation
+    
         $nameWorkshop = $reparation->getNameWorkshop();
         $registerDate = $reparation->getRegisterDate();
         $licensePlate = $reparation->getLicensePlate();
         $photoUrl = $reparation->getPhotoUrl();
         $watermarkText = $reparation->getWatermarkText();
-
-        // Vincular los parámetros de la consulta con las variables
+    
         $stmt->bindParam(':name_workshop', $nameWorkshop);
         $stmt->bindParam(':register_date', $registerDate);
         $stmt->bindParam(':license_plate', $licensePlate);
         $stmt->bindParam(':photo_url', $photoUrl);
         $stmt->bindParam(':watermark_text', $watermarkText);
-
-        // Ejecutar la consulta y devolver el resultado
-        return $stmt->execute();
+    
+        try {
+            $result = $stmt->execute();
+            return $result;
+        } catch (PDOException $e) {
+            // Imprimir el error para depurar
+            echo "Error al ejecutar la consulta: " . $e->getMessage();
+            return false;
+        }
     }
+    
 }
+
+?>

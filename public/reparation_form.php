@@ -32,6 +32,7 @@
     </div>
 </div>
 
+
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -60,6 +61,26 @@
                             <input type="date" id="repair_date" name="repair_date" class="form-control" required>
                         </div>
 
+                        <div class="mb-3">
+                            <label for="id_workshop" class="form-label">Workshop ID:</label>
+                            <input type="text" id="id_workshop" name="id_workshop" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="name_workshop" class="form-label">Workshop Name:</label>
+                            <input type="text" id="name_workshop" name="name_workshop" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="photo_url" class="form-label">Photo URL:</label>
+                            <input type="text" id="photo_url" name="photo_url" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="watermark_text" class="form-label">Watermark Text:</label>
+                            <input type="text" id="watermark_text" name="watermark_text" class="form-control" required>
+                        </div>
+
                         <div class="text-center">
                             <button type="submit" name="action" value="insertReparation" class="btn btn-primary">Submit</button>
                         </div>
@@ -69,6 +90,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

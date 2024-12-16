@@ -1,9 +1,7 @@
 <?php
 session_start();
 
-// Verificar si el usuario está logueado y si es un empleado
 if (isset($_SESSION['role']) && $_SESSION['role'] == 'employee') {
-    // Mostrar formulario de reparación
     ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -15,30 +13,41 @@ if (isset($_SESSION['role']) && $_SESSION['role'] == 'employee') {
     <body>
         <h1>Register Car Reparation</h1>
         
-        <!-- Formulario para registrar reparación -->
-        <form action="submit_reparation.php" method="post" enctype="multipart/form-data">
-            <label for="id_workshop">Workshop ID:</label>
-            <input type="text" id="id_workshop" name="id_workshop" required><br><br>
+        <form action="../src/Controller/ControllerRepaation.php" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="id_workshop" class="form-label">Workshop ID:</label>
+                <input type="text" id="id_workshop" name="id_workshop" class="form-control" required><br><br>
+            </div>
 
-            <label for="name_workshop">Workshop Name:</label>
-            <input type="text" id="name_workshop" name="name_workshop" required><br><br>
+            <div class="mb-3">
+                <label for="name_workshop" class="form-label">Workshop Name:</label>
+                <input type="text" id="name_workshop" name="name_workshop" class="form-control" required><br><br>
+            </div>
 
-            <label for="register_date">Register Date:</label>
-            <input type="date" id="register_date" name="register_date" required><br><br>
+            <div class="mb-3">
+                <label for="register_date" class="form-label">Register Date:</label>
+                <input type="date" id="register_date" name="register_date" class="form-control" required><br><br>
+            </div>
 
-            <label for="license_plate">License Plate:</label>
-            <input type="text" id="license_plate" name="license_plate" pattern="[0-9]{4}-[A-Z]{3}" required><br><br>
+            <div class="mb-3">
+                <label for="license_plate" class="form-label">License Plate:</label>
+                <input type="text" id="license_plate" name="license_plate" class="form-control" pattern="[0-9]{4}-[A-Z]{3}" required><br><br>
+            </div>
 
-            <label for="photo">Upload Vehicle Photo:</label>
-            <input type="file" id="photo" name="photo" accept="image/*" required><br><br>
+            <div class="mb-3">
+                <label for="photo" class="form-label">Upload Vehicle Photo:</label>
+                <input type="file" id="photo" name="photo" class="form-control" accept="image/*" required><br><br>
+            </div>
 
-            <button type="submit">Submit Reparation</button>
+            <div class="text-center">
+                <button type="submit" name="action" value="submitReparation" class="btn btn-primary">Submit Reparation</button>
+            </div>
         </form>
     </body>
     </html>
     <?php
 } else {
-    // Si no es empleado, redirigir a la página de landing
+    // Redirige a la página de inicio si el usuario no es un empleado
     header('Location: landing_page.php');
     exit();
 }
