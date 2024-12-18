@@ -47,7 +47,6 @@ if (isset($_SESSION['role']) && $_SESSION['role'] == 'employee') {
     </html>
     <?php
 } else {
-    // Redirige a la página de inicio si el usuario no es un empleado
     header('Location: landing_page.php');
     exit();
 }
