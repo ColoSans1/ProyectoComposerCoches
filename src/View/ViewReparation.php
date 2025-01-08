@@ -1,53 +1,58 @@
 <?php
-session_start();
-
-if (isset($_SESSION['role']) && $_SESSION['role'] == 'employee') {
+if (isset($reparation)) {
     ?>
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Register Car Reparation</title>
-    </head>
-    <body>
-        <h1>Register Car Reparation</h1>
-        
-        <form action="../src/Controller/ControllerRepaation.php" method="post" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="id_workshop" class="form-label">Workshop ID:</label>
-                <input type="text" id="id_workshop" name="id_workshop" class="form-control" required><br><br>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h2 class="mb-0">Reparation Details</h2>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped table-hover">
+                            <tbody>
+                                <tr>
+                                    <th scope="row" class="text-end">Reparation ID:</th>
+                                    <td><?= htmlspecialchars($reparation['id_reparation']) ?></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="text-end">Workshop ID:</th>
+                                    <td><?= htmlspecialchars($reparation['id_workshop']) ?></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="text-end">License Plate:</th>
+                                    <td><?= htmlspecialchars($reparation['license_plate']) ?></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="text-end">Workshop Name:</th>
+                                    <td><?= htmlspecialchars($reparation['name_workshop']) ?></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="text-end">Register Date:</th>
+                                    <td><?= htmlspecialchars($reparation['register_date']) ?></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="text-end">Photo:</th>
+                                    <td>
+                                        <img src="<?= htmlspecialchars($reparation['photo_url']) ?>" alt="Vehicle Photo" class="img-fluid rounded" style="max-width: 300px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="text-end">Watermark Text:</th>
+                                    <td><?= htmlspecialchars($reparation['watermark_text']) ?></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="index.php" class="btn btn-secondary btn-lg">Back to Query</a>
+                    </div>
+                </div>
             </div>
-
-            <div class="mb-3">
-                <label for="name_workshop" class="form-label">Workshop Name:</label>
-                <input type="text" id="name_workshop" name="name_workshop" class="form-control" required><br><br>
-            </div>
-
-            <div class="mb-3">
-                <label for="register_date" class="form-label">Register Date:</label>
-                <input type="date" id="register_date" name="register_date" class="form-control" required><br><br>
-            </div>
-
-            <div class="mb-3">
-                <label for="license_plate" class="form-label">License Plate:</label>
-                <input type="text" id="license_plate" name="license_plate" class="form-control" pattern="[0-9]{4}-[A-Z]{3}" required><br><br>
-            </div>
-
-            <div class="mb-3">
-                <label for="photo" class="form-label">Upload Vehicle Photo:</label>
-                <input type="file" id="photo" name="photo" class="form-control" accept="image/*" required><br><br>
-            </div>
-
-            <div class="text-center">
-                <button type="submit" name="action" value="submitReparation" class="btn btn-primary">Submit Reparation</button>
-            </div>
-        </form>
-    </body>
-    </html>
+        </div>
+    </div>
     <?php
 } else {
-    header('Location: landing_page.php');
-    exit();
+    echo "<div class='alert alert-warning text-center mt-5'>No reparation data found. Please try again.</div>";
 }
 ?>

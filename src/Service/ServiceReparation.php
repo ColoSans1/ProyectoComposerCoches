@@ -5,16 +5,13 @@ require_once __DIR__ . '/../Model/Reparation.php';
 class ServiceReparation {
     private $connection = null;
 
-    // Constructor: Se conecta a la base de datos
     public function __construct() {
         if ($this->connection === null) {
             $this->connect();
         }
     }
 
-    // Conexión a la base de datos
     private function connect() {
-        // Cargar la configuración del archivo INI
         $config = parse_ini_file(__DIR__ . '/../../db_config.ini');
         if (!$config) {
             die("Error: No se pudo cargar el archivo de configuración.");
@@ -23,13 +20,11 @@ class ServiceReparation {
         }
         
         
-        // Verificar que existan todas las claves necesarias en el archivo de configuración
         if (!isset($config['servername'], $config['username'], $config['password'], $config['dbname'])) {
             die("Error: Faltan algunas claves en el archivo de configuración.");
         }
 
         try {
-            // Conexión PDO a la base de datos
             $this->connection = new PDO(
                 "mysql:host={$config['servername']};dbname={$config['dbname']}",
                 $config['username'],
@@ -41,7 +36,6 @@ class ServiceReparation {
         }
     }
 
-    // Inserción de una nueva reparación
     public function insertReparation($reparation) {
         $sql = "INSERT INTO reparation 
                 (name_workshop, register_date, license_plate, photo_url, watermark_text)
@@ -64,7 +58,6 @@ class ServiceReparation {
             $result = $stmt->execute();
             return $result;
         } catch (PDOException $e) {
-            // Imprimir el error para depurar
             echo "Error al ejecutar la consulta: " . $e->getMessage();
             return false;
         }
