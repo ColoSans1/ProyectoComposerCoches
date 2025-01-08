@@ -37,10 +37,6 @@ if (isset($reparation)) {
                                         <img src="<?= htmlspecialchars($reparation['foto_vehiculo']) ?>" alt="Vehicle Photo" class="img-fluid rounded" style="max-width: 300px;"> <!-- Actualizado -->
                                     </td>
                                 </tr>
-                                <tr>
-                                    <th scope="row" class="text-end">Watermark Text:</th>
-                                    <td><?= htmlspecialchars($reparation['watermark_text']) ?></td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>

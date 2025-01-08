@@ -7,15 +7,13 @@ class Reparation {
     private $fecha_registro;        
     private $matricula_vehiculo;    
     private $foto_vehiculo;          
-    private $watermark_text;
 
-    public function __construct($id_taller, $nombre_taller, $fecha_registro, $matricula_vehiculo = '', $foto_vehiculo, $watermark_text) {
+    public function __construct($id_taller, $nombre_taller, $fecha_registro, $matricula_vehiculo = '', $foto_vehiculo) {
         $this->id_taller = $id_taller;
         $this->nombre_taller = $nombre_taller;
         $this->fecha_registro = $fecha_registro;
         $this->matricula_vehiculo = $matricula_vehiculo;
         $this->foto_vehiculo = $foto_vehiculo;
-        $this->watermark_text = $watermark_text;
     }
 
     // Métodos getter actualizados
@@ -39,8 +37,6 @@ class Reparation {
         return $this->foto_vehiculo;
     }
 
-    public function getWatermarkText() {
-        return $this->watermark_text;
-    }
+
 }
 ?>
