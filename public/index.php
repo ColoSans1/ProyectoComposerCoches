@@ -1,5 +1,4 @@
 <?php
-// Se verifica si se ha seleccionado un rol antes de mostrar los formularios.
 $role = isset($_POST['role']) ? $_POST['role'] : '';
 ?>
 
@@ -14,7 +13,7 @@ $role = isset($_POST['role']) ? $_POST['role'] : '';
 <body>
     <div class="container py-5">
         <?php if ($role == ''): ?>
-            <!-- Pantalla de selección de rol -->
+            <!-- Form to choose the role -->
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="card shadow">
@@ -44,7 +43,7 @@ $role = isset($_POST['role']) ? $_POST['role'] : '';
                 </div>
             </div>
         <?php elseif ($role == 'employee'): ?>
-            <!-- Pantalla de empleado -->
+            <!-- Employee options form -->
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="card shadow">
@@ -52,7 +51,6 @@ $role = isset($_POST['role']) ? $_POST['role'] : '';
                             <h1 class="text-center mb-4">Employee Options</h1>
                             <p class="text-center">You can create a new repair or search for an existing one.</p>
 
-                            <!-- Formulario de creación de reparación -->
                             <h3>Create Reparation</h3>
                             <form action="../src/Controller/ControllerRepaation.php" method="POST" enctype="multipart/form-data">
                                 <div class="mb-3">
@@ -83,32 +81,17 @@ $role = isset($_POST['role']) ? $_POST['role'] : '';
                                     <label for="photo_url" class="form-label">Photo Upload:</label>
                                     <input type="file" id="photo_url" name="photo_url" class="form-control" accept="image/*" required>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="watermark_text" class="form-label">Watermark Text:</label>
-                                    <input type="text" id="watermark_text" name="watermark_text" class="form-control" required>
-                                </div>
                                 <div class="text-center">
                                     <button type="submit" name="action" value="insertReparation" class="btn btn-primary">Submit</button>
                                 </div>
                             </form>
 
-                            <!-- Formulario de consulta de reparación -->
-                            <h3 class="mt-5">Reparation Query</h3>
-                            <form action="../src/Controller/ControllerRepaation.php" method="POST">
-                                <div class="mb-3">
-                                    <label for="reparation_id" class="form-label">Reparation ID:</label>
-                                    <input type="text" id="reparation_id" name="reparation_id" class="form-control" required>
-                                </div>
-                                <div class="text-center">
-                                    <button type="submit" name="action" value="getReparation" class="btn btn-primary">Search</button>
-                                </div>
-                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         <?php elseif ($role == 'client'): ?>
-            <!-- Pantalla de cliente -->
+            <!-- Client options form -->
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="card shadow">
@@ -116,7 +99,6 @@ $role = isset($_POST['role']) ? $_POST['role'] : '';
                             <h1 class="text-center mb-4">Client Options</h1>
                             <p class="text-center">You can only search for your repair.</p>
 
-                            <!-- Formulario de consulta de reparación -->
                             <h3>Reparation Query</h3>
                             <form action="../src/Controller/ControllerRepaation.php" method="POST">
                                 <div class="mb-3">

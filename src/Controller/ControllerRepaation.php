@@ -27,39 +27,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $idWorkshop = $_POST['id_workshop'];
         $nameWorkshop = htmlspecialchars($_POST['name_workshop']);
         $watermarkText = htmlspecialchars($_POST['watermark_text']);
-        $uploadDir = 'uploads/';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true); 
+
+        $photoContent = file_get_contents($_FILES['photo_url']['tmp_name']);  // Leemos el archivo temporal subido
+
+        $reparation = new Reparation(
+            $idWorkshop,      
+            $nameWorkshop,    
+            $repairDate,      
+            $licensePlate,    
+            $photoContent,    // Pasamos el contenido del archivo binario
+            $watermarkText    
+        );
+
+        $serviceReparation = new ServiceReparation();
+        if ($serviceReparation->insertReparation($reparation)) {
+            echo "Reparación registrada con éxito mediante ServiceReparation.";
+        } else {
+            echo "Error al registrar la reparación usando ServiceReparation.";
         }
 
-        $photoName = basename($_FILES['photo_url']['name']);
-        $photoPath = $uploadDir . $photoName;
+        $query = "INSERT INTO reparation (id_taller, nombre_taller, fecha_registro, matricula_vehiculo, foto_vehiculo)
+                  VALUES (?, ?, ?, ?, ?)";
 
-        if (move_uploaded_file($_FILES['photo_url']['tmp_name'], $photoPath)) {
-            $reparation = new Reparation(
-                $idWorkshop,      
-                $nameWorkshop,    
-                $repairDate,      
-                $licensePlate,    
-                $photoPath,       
-                $watermarkText    
-            );
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(1, $idWorkshop);
+        $stmt->bindParam(2, $nameWorkshop);
+        $stmt->bindParam(3, $repairDate);
+        $stmt->bindParam(4, $licensePlate);
+        $stmt->bindParam(5, $photoContent, PDO::PARAM_LOB);  
 
-            $serviceReparation = new ServiceReparation();
-            if ($serviceReparation->insertReparation($reparation)) {
-                echo "Reparación registrada con éxito mediante ServiceReparation.";
-            } else {
-                echo "Error al registrar la reparación usando ServiceReparation.";
-            }
-
-            $query = "INSERT INTO reparation (name_workshop, register_date, license_plate, photo_url, watermark_text)
-                      VALUES (?, ?, ?, ?, ?)";
-            $stmt = $pdo->prepare($query);
-            $stmt->execute([$nameWorkshop, $repairDate, $licensePlate, $photoPath, $watermarkText]);
-
-            echo "Reparación registrada con éxito en la base de datos.";
+        if ($stmt->execute()) {
+            echo "Reparación registrada con éxito en la base de datos con la foto.";
         } else {
-            echo "Error al subir la imagen. Verifica permisos de la carpeta uploads.";
+            echo "Error al registrar la reparación en la base de datos.";
         }
     } else {
         echo "Faltan campos obligatorios o hay un problema con la imagen.";
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if ($_POST['action'] === 'getReparation') {
     $reparationId = $_POST['reparation_id'];
 
-    $query = "SELECT * FROM reparation WHERE id_reparation = :id";
+    $query = "SELECT * FROM reparation WHERE id_reparacion = :id";
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':id', $reparationId, PDO::PARAM_INT);
     $stmt->execute();
@@ -77,11 +77,11 @@ if ($_POST['action'] === 'getReparation') {
     $reparation = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($reparation) {
-        include '../view/ViewReparation.php';
+        header('Content-Type: image/jpeg');  
+        echo $reparation['foto_vehiculo'];
+        exit;
     } else {
-        echo "<div class='alert alert-danger'>Reparation not found.</div>";
+        echo "<div class='alert alert-danger'>Reparación no encontrada.</div>";
     }
 }
-
-
 ?>

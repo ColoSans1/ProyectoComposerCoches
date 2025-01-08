@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'arnaucolominassans/proyecto-composer-coches',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => null,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '9c6c8fbec8774b47fa10a580c6f458b4825fb1cf',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'arnaucolominassans/proyecto-composer-coches' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => null,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '9c6c8fbec8774b47fa10a580c6f458b4825fb1cf',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -38,9 +38,9 @@
             'dev_requirement' => false,
         ),
         'intervention/image' => array(
-            'pretty_version' => '3.9.1',
-            'version' => '3.9.1.0',
-            'reference' => 'b496d1f6b9f812f96166623358dfcafb8c3b1683',
+            'pretty_version' => '3.9.0',
+            'version' => '3.9.0.0',
+            'reference' => '1e0a2b6d767ef22a095924c6bcb2981da6de6f1e',
             'type' => 'library',
             'install_path' => __DIR__ . '/../intervention/image',
             'aliases' => array(),

@@ -18,8 +18,7 @@ class ServiceReparation {
         } else {
             print_r($config); 
         }
-        
-        
+
         if (!isset($config['servername'], $config['username'], $config['password'], $config['dbname'])) {
             die("Error: Faltan algunas claves en el archivo de configuración.");
         }
@@ -35,24 +34,23 @@ class ServiceReparation {
             die("Connection failed: " . $e->getMessage());
         }
     }
-
     public function insertReparation($reparation) {
         $sql = "INSERT INTO reparation 
-                (name_workshop, register_date, license_plate, photo_url, watermark_text)
-                VALUES (:name_workshop, :register_date, :license_plate, :photo_url, :watermark_text)";
+                (id_taller, nombre_taller, fecha_registro, matricula_vehiculo, foto_vehiculo)
+                VALUES (:id_taller, :nombre_taller, :fecha_registro, :matricula_vehiculo, :foto_vehiculo)";
         $stmt = $this->connection->prepare($sql);
     
-        $nameWorkshop = $reparation->getNameWorkshop();
-        $registerDate = $reparation->getRegisterDate();
-        $licensePlate = $reparation->getLicensePlate();
-        $photoUrl = $reparation->getPhotoUrl();
-        $watermarkText = $reparation->getWatermarkText();
+        $idTaller = $reparation->getIdTaller();
+        $nombreTaller = $reparation->getNombreTaller();
+        $fechaRegistro = $reparation->getFechaRegistro();
+        $matriculaVehiculo = $reparation->getMatriculaVehiculo();
+        $fotoVehiculo = $reparation->getFotoVehiculo();
     
-        $stmt->bindParam(':name_workshop', $nameWorkshop);
-        $stmt->bindParam(':register_date', $registerDate);
-        $stmt->bindParam(':license_plate', $licensePlate);
-        $stmt->bindParam(':photo_url', $photoUrl);
-        $stmt->bindParam(':watermark_text', $watermarkText);
+        $stmt->bindParam(':id_taller', $idTaller);
+        $stmt->bindParam(':nombre_taller', $nombreTaller);
+        $stmt->bindParam(':fecha_registro', $fechaRegistro);
+        $stmt->bindParam(':matricula_vehiculo', $matriculaVehiculo);
+        $stmt->bindParam(':foto_vehiculo', $fotoVehiculo);
     
         try {
             $result = $stmt->execute();

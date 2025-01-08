@@ -1,4 +1,4 @@
-<?php
+<?php 
 if (isset($reparation)) {
     ?>
     <div class="container py-5">
@@ -17,24 +17,24 @@ if (isset($reparation)) {
                                 </tr>
                                 <tr>
                                     <th scope="row" class="text-end">Workshop ID:</th>
-                                    <td><?= htmlspecialchars($reparation['id_workshop']) ?></td>
+                                    <td><?= htmlspecialchars($reparation['id_taller']) ?></td> 
                                 </tr>
                                 <tr>
                                     <th scope="row" class="text-end">License Plate:</th>
-                                    <td><?= htmlspecialchars($reparation['license_plate']) ?></td>
+                                    <td><?= htmlspecialchars($reparation['matricula_vehiculo']) ?></td> 
                                 </tr>
                                 <tr>
                                     <th scope="row" class="text-end">Workshop Name:</th>
-                                    <td><?= htmlspecialchars($reparation['name_workshop']) ?></td>
+                                    <td><?= htmlspecialchars($reparation['nombre_taller']) ?></td> 
                                 </tr>
                                 <tr>
                                     <th scope="row" class="text-end">Register Date:</th>
-                                    <td><?= htmlspecialchars($reparation['register_date']) ?></td>
+                                    <td><?= htmlspecialchars($reparation['fecha_registro']) ?></td> 
                                 </tr>
                                 <tr>
                                     <th scope="row" class="text-end">Photo:</th>
                                     <td>
-                                        <img src="<?= htmlspecialchars($reparation['photo_url']) ?>" alt="Vehicle Photo" class="img-fluid rounded" style="max-width: 300px;">
+                                        <img src="<?= htmlspecialchars($reparation['foto_vehiculo']) ?>" alt="Vehicle Photo" class="img-fluid rounded" style="max-width: 300px;"> <!-- Actualizado -->
                                     </td>
                                 </tr>
                                 <tr>
@@ -45,7 +45,7 @@ if (isset($reparation)) {
                         </table>
                     </div>
                     <div class="card-footer text-center">
-                        <a href="index.php" class="btn btn-secondary btn-lg">Back to Query</a>
+                        <a href="" class="btn btn-secondary btn-lg">Back to Query</a>
                     </div>
                 </div>
             </div>

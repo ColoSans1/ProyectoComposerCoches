@@ -2,46 +2,45 @@
 require_once 'C:\xampp_daw2\htdocs\ProyectoComposerCoches\src\Service\ServiceReparation.php';
 
 class Reparation {
-    private $id_workshop;
-    private $name_workshop;
-    private $register_date;
-    private $license_plate;
-    private $photo_url;
+    private $id_taller;             
+    private $nombre_taller;          
+    private $fecha_registro;        
+    private $matricula_vehiculo;    
+    private $foto_vehiculo;          
     private $watermark_text;
 
-    public function __construct($id_workshop, $name_workshop, $register_date, $license_plate = '', $photo_url, $watermark_text) {
-        $this->id_workshop = $id_workshop;
-        $this->name_workshop = $name_workshop;
-        $this->register_date = $register_date;
-        $this->license_plate = $license_plate; 
-        $this->photo_url = $photo_url;
+    public function __construct($id_taller, $nombre_taller, $fecha_registro, $matricula_vehiculo = '', $foto_vehiculo, $watermark_text) {
+        $this->id_taller = $id_taller;
+        $this->nombre_taller = $nombre_taller;
+        $this->fecha_registro = $fecha_registro;
+        $this->matricula_vehiculo = $matricula_vehiculo;
+        $this->foto_vehiculo = $foto_vehiculo;
         $this->watermark_text = $watermark_text;
     }
-    
 
-    public function getIdWorkshop() {
-        return $this->id_workshop;
+    // Métodos getter actualizados
+    public function getIdTaller() {
+        return $this->id_taller;
     }
 
-    public function getNameWorkshop() {
-        return $this->name_workshop;
+    public function getNombreTaller() {
+        return $this->nombre_taller;
     }
 
-    public function getRegisterDate() {
-        return $this->register_date;
+    public function getFechaRegistro() {
+        return $this->fecha_registro;
     }
 
-    public function getLicensePlate() {
-        return $this->license_plate;
+    public function getMatriculaVehiculo() {
+        return $this->matricula_vehiculo;
     }
 
-    public function getPhotoUrl() {
-        return $this->photo_url;
+    public function getFotoVehiculo() {
+        return $this->foto_vehiculo;
     }
 
     public function getWatermarkText() {
         return $this->watermark_text;
     }
 }
-
 ?>
