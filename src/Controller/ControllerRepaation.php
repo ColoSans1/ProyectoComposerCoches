@@ -90,19 +90,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $query = "SELECT * FROM reparation WHERE id_reparacion = :id";
         $stmt = $pdo->prepare($query);
         $stmt->bindParam(':id', $reparationId, PDO::PARAM_INT);
-        $stmt->execute();
         
-        $reparation = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($reparation) {
-            header('Content-Type: image/jpeg');  
-            echo $reparation['foto_vehiculo']; 
-            exit;
+        if (!$stmt->execute()) {
+            echo "Error en la consulta: " . implode(" - ", $stmt->errorInfo());
         } else {
-            echo "<div class='alert alert-danger'>Reparación no encontrada.</div>";
+            $reparation = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            // Verifica si la foto está en base64
+            if (!empty($reparation['foto_vehiculo'])) {
+                $reparation['foto_vehiculo'] = 'data:image/jpeg;base64,' . base64_encode($reparation['foto_vehiculo']);
+            }
+            
+            // Verifica la longitud de la cadena de base64 y muestra el valor
+            var_dump(strlen($reparation['foto_vehiculo'])); // Muestra la longitud
+            var_dump($reparation['foto_vehiculo']); // Muestra el contenido
         }
-        
     }
+    
+    
+    
+    
     
 }
 

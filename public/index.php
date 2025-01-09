@@ -124,7 +124,7 @@ $role = isset($_POST['role']) ? $_POST['role'] : '';
                 <p class="text-center">You can only search for your repair.</p>
 
                 <h3>Reparation Query</h3>
-                <form action="../src/View/ViewReparation.php" method="POST">
+                <form action="../src/Controller/ControllerRepaation.php" method="POST">
     <div class="mb-3">
         <label for="reparation_id" class="form-label">Reparation ID:</label>
         <input type="text" id="reparation_id" name="reparation_id" class="form-control" required>

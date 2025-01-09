@@ -13,7 +13,7 @@ if (!empty($reparation) && is_array($reparation)) {
                             <tbody>
                                 <tr>
                                     <th scope="row" class="text-end">Reparation ID:</th>
-                                    <td><?= htmlspecialchars($reparation['id_reparation'] ?? 'N/A') ?></td>
+                                    <td><?= htmlspecialchars($reparation['id_reparacion'] ?? 'N/A') ?></td>
                                 </tr>
                                 <tr>
                                     <th scope="row" class="text-end">Workshop ID:</th>
