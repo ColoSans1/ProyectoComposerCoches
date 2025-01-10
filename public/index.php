@@ -43,7 +43,6 @@ $role = isset($_POST['role']) ? $_POST['role'] : '';
                 </div>
             </div>
         <?php elseif ($role == 'employee'): ?>
-            <!-- Employee Options: Reparation Form -->
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="card shadow">
@@ -83,7 +82,6 @@ $role = isset($_POST['role']) ? $_POST['role'] : '';
                                     <input type="file" id="photo_url" name="photo_url" class="form-control" accept="image/*" required>
                                 </div>
 
-                                <!-- Campo oculto para la acción -->
                                 <input type="hidden" name="action" value="insertReparation">
 
                                 <div class="text-center">
@@ -170,41 +168,6 @@ $role = isset($_POST['role']) ? $_POST['role'] : '';
                 },
                 error: function() {
                     $('#reparation-results').html('<div class="alert alert-danger">An error occurred while searching.</div>');
-                }
-            });
-        });
-
-        $('#reparation-insert-form').on('submit', function(e) {
-            e.preventDefault();
-
-            var car_model = $('#car_model').val();
-            var license_plate = $('#license_plate').val();
-            var issue_description = $('#issue_description').val();
-            var repair_date = $('#repair_date').val();
-            var workshop_name = $('#name_workshop').val();
-            var photo = $('#photo_url')[0].files[0];
-
-            var formData = new FormData();
-            formData.append('action', 'insertReparation');
-            formData.append('car_model', car_model);
-            formData.append('license_plate', license_plate);
-            formData.append('issue_description', issue_description);
-            formData.append('repair_date', repair_date);
-            formData.append('workshop_name', workshop_name);
-            formData.append('photo_url', photo);
-
-            $.ajax({
-                url: '../src/Controller/ControllerReparation.php',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    $('#insert-confirmation').html(response);
-                    $('#reparation-insert-form')[0].reset();
-                },
-                error: function() {
-                    $('#insert-confirmation').html('<div class="alert alert-danger">An error occurred while inserting the repair.</div>');
                 }
             });
         });

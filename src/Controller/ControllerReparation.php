@@ -12,7 +12,6 @@ try {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // Insertar una nueva reparación
     if (
         isset($_POST['car_model'], $_POST['issue_description'], $_POST['repair_date'], $_POST['name_workshop']) &&
         isset($_FILES['photo_url']) && $_FILES['photo_url']['error'] === UPLOAD_ERR_OK
@@ -21,30 +20,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $issueDescription = htmlspecialchars($_POST['issue_description']);
         $repairDate = $_POST['repair_date'];  // Validar formato de fecha
         $workshopName = htmlspecialchars($_POST['name_workshop']);
-        $workshopId = strtoupper(uniqid('WS', true));  // ID de taller único generado
-
+        
         $licensePlate = !empty($_POST['license_plate']) ? htmlspecialchars($_POST['license_plate']) : 'DEFAULT_VALUE';
 
-        // Verificar si la carga de la foto fue exitosa
+        // Validar carga de imagen
         $photo = $_FILES['photo_url'];
         if ($photo['error'] !== UPLOAD_ERR_OK) {
-            die("Error al cargar la foto.");
+            die("Error al cargar la foto. Código de error: " . $photo['error']);
         }
 
+        // Verificar si el archivo es una imagen válida
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        if (!in_array($photo['type'], $allowedTypes)) {
+            die("El archivo no es una imagen válida.");
+        }
+
+        // Obtener el contenido de la imagen
         $photoContent = file_get_contents($photo['tmp_name']);
 
-        // Crear objeto Reparation
+        // Aquí insertamos la reparación
         $reparation = new Reparation(
-            $workshopId,
+            strtoupper(uniqid('WS', true)), // ID único del taller
             $workshopName,
             $repairDate,
             $licensePlate,
             $photoContent
         );
 
-        // Instancia del servicio para manejar la inserción
         $serviceReparation = new ServiceReparation();
-
+        
         try {
             if ($serviceReparation->insertReparation($reparation)) {
                 echo "Reparación registrada con éxito.";
@@ -57,8 +61,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo "Faltan datos para insertar la reparación o error en la carga de archivo.";
     }
+}
 
-    // Buscar reparación existente
+
     if (isset($_POST['action']) && $_POST['action'] === 'getReparation') {
         if (isset($_POST['reparation_id'])) {
             $reparationId = $_POST['reparation_id'];
@@ -80,9 +85,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "ID de reparación no proporcionado.";
         }
     }
-
-} else {
-    echo "Método de solicitud no válido.";
-}
 
 ?>
