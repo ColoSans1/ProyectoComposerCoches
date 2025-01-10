@@ -9,11 +9,11 @@ $role = isset($_POST['role']) ? $_POST['role'] : '';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Car Workshop System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="container py-5">
         <?php if ($role == ''): ?>
-            <!-- Form to choose the role -->
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="card shadow">
@@ -43,7 +43,7 @@ $role = isset($_POST['role']) ? $_POST['role'] : '';
                 </div>
             </div>
         <?php elseif ($role == 'employee'): ?>
-            <!-- Employee options form -->
+            <!-- Employee Options: Reparation Form -->
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="card shadow">
@@ -52,7 +52,7 @@ $role = isset($_POST['role']) ? $_POST['role'] : '';
                             <p class="text-center">You can create a new repair or search for an existing one.</p>
 
                             <h3>Create Reparation</h3>
-                            <form action="../src/Controller/ControllerRepaation.php" method="POST" enctype="multipart/form-data">
+                            <form id="reparation-insert-form" method="POST" enctype="multipart/form-data">
                                 <div class="mb-3">
                                     <label for="car_model" class="form-label">Car Model:</label>
                                     <input type="text" id="car_model" name="car_model" class="form-control" required>
@@ -85,21 +85,46 @@ $role = isset($_POST['role']) ? $_POST['role'] : '';
                                     <button type="submit" name="action" value="insertReparation" class="btn btn-primary">Submit</button>
                                 </div>
                             </form>
-
+                            <div id="insert-confirmation"></div>
                         </div>
                     </div>
                 </div>
                 <br>
-                
+
                 <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <h1 class="text-center mb-4">Employee Options</h1>
+                                <p class="text-center">You can only search for your repair.</p>
+
+                                <h3>Reparation Query</h3>
+                                <form id="reparation-query-form" method="POST">
+                                    <div class="mb-3">
+                                        <label for="reparation_id" class="form-label">Reparation ID:</label>
+                                        <input type="text" id="reparation_id" name="reparation_id" class="form-control" required>
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="submit" name="action" value="getReparation" class="btn btn-primary">Search</button>
+                                    </div>
+                                </form>
+                                <div id="reparation-results"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        <?php elseif ($role == 'client'): ?>
+            <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="card shadow">
                         <div class="card-body">
-                            <h1 class="text-center mb-4">Employee Options</h1>
+                            <h1 class="text-center mb-4">Client Options</h1>
                             <p class="text-center">You can only search for your repair.</p>
 
                             <h3>Reparation Query</h3>
-                            <form action="../src/Controller/ControllerRepaation.php" method="POST">
+                            <form id="reparation-query-form" method="POST">
                                 <div class="mb-3">
                                     <label for="reparation_id" class="form-label">Reparation ID:</label>
                                     <input type="text" id="reparation_id" name="reparation_id" class="form-control" required>
@@ -108,41 +133,64 @@ $role = isset($_POST['role']) ? $_POST['role'] : '';
                                     <button type="submit" name="action" value="getReparation" class="btn btn-primary">Search</button>
                                 </div>
                             </form>
+                            <div id="reparation-results"></div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            </div>
-        <?php elseif ($role == 'client'): ?>
-            <!-- Client options form -->
-            <div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow">
-            <div class="card-body">
-                <h1 class="text-center mb-4">Client Options</h1>
-                <p class="text-center">You can only search for your repair.</p>
-
-                <h3>Reparation Query</h3>
-                <form action="../src/Controller/ControllerRepaation.php" method="POST">
-    <div class="mb-3">
-        <label for="reparation_id" class="form-label">Reparation ID:</label>
-        <input type="text" id="reparation_id" name="reparation_id" class="form-control" required>
-    </div>
-    <div class="text-center">
-        <button type="submit" name="action" value="getReparation" class="btn btn-primary">Search</button>
-    </div>
-</form>
-
-            </div>
-        </div>
-    </div>
-</div>
-
         <?php endif; ?>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#reparation-query-form').on('submit', function(e) {
+                e.preventDefault(); 
+
+                var reparation_id = $('#reparation_id').val();  
+
+                $.ajax({
+                    url: '../src/Controller/ControllerReparation.php',  
+                    type: 'POST',
+                    data: {
+                        action: 'getReparation',  
+                        reparation_id: reparation_id 
+                    },
+                    success: function(response) {
+                        $('#reparation-results').html(response);
+                    },
+                    error: function() {
+                        $('#reparation-results').html('<div class="alert alert-danger">An error occurred while searching.</div>');
+                    }
+                });
+            });
+
+            $('#reparation-insert-form').on('submit', function(e) {
+                e.preventDefault();  
+
+                var car_model = $('#car_model').val();
+                var issue_description = $('#issue_description').val();
+
+                $.ajax({
+                    url: '../src/Controller/ControllerReparation.php', 
+                    type: 'POST',
+                    data: {
+                        action: 'insertReparation',  
+                        car_model: car_model,  
+                        issue_description: issue_description  
+                    },
+                    success: function(response) {
+                        $('#insert-confirmation').html(response);
+                        $('#reparation-insert-form')[0].reset();  
+                    },
+                    error: function() {
+                        $('#insert-confirmation').html('<div class="alert alert-danger">An error occurred while inserting the repair.</div>');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

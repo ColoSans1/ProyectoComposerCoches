@@ -1,6 +1,5 @@
-<?php 
-if (!empty($reparation) && is_array($reparation)) {
-    ?>
+<?php if (!empty($reparation) && is_array($reparation)): ?>
+    <!-- Mostrar detalles de la reparación -->
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -17,42 +16,43 @@ if (!empty($reparation) && is_array($reparation)) {
                                 </tr>
                                 <tr>
                                     <th scope="row" class="text-end">Workshop ID:</th>
-                                    <td><?= htmlspecialchars($reparation['id_taller'] ?? 'N/A') ?></td> 
+                                    <td><?= htmlspecialchars($reparation['id_taller'] ?? 'N/A') ?></td>
                                 </tr>
                                 <tr>
                                     <th scope="row" class="text-end">License Plate:</th>
-                                    <td><?= htmlspecialchars($reparation['matricula_vehiculo'] ?? 'N/A') ?></td> 
+                                    <td><?= htmlspecialchars($reparation['matricula_vehiculo'] ?? 'N/A') ?></td>
                                 </tr>
                                 <tr>
                                     <th scope="row" class="text-end">Workshop Name:</th>
-                                    <td><?= htmlspecialchars($reparation['nombre_taller'] ?? 'N/A') ?></td> 
+                                    <td><?= htmlspecialchars($reparation['nombre_taller'] ?? 'N/A') ?></td>
                                 </tr>
                                 <tr>
                                     <th scope="row" class="text-end">Register Date:</th>
-                                    <td><?= htmlspecialchars($reparation['fecha_registro'] ?? 'N/A') ?></td> 
+                                    <td><?= htmlspecialchars($reparation['fecha_registro'] ?? 'N/A') ?></td>
                                 </tr>
                                 <tr>
-                                    <th scope="row" class="text-end">Photo:</th>
-                                    <td>
-                                        <?php if (!empty($reparation['foto_vehiculo'])): ?>
-                                            <img src="<?= htmlspecialchars($reparation['foto_vehiculo']) ?>" alt="Vehicle Photo" class="img-fluid rounded" style="max-width: 300px;">
-                                        <?php else: ?>
-                                            <p>No photo available</p>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
+                                <tr>
+    <th scope="row" class="text-end">Photo:</th>
+    <td>
+        <?php
+        if (!empty($reparation['foto_vehiculo'])) {
+            echo '<img src="data:image/jpeg;base64,' . base64_encode($reparation['foto_vehiculo']) . '" alt="Vehicle Photo" class="img-fluid" />';
+        } else {
+            echo 'No photo available';
+        }
+        ?>
+    </td>
+</tr>
+
+
                             </tbody>
                         </table>
                     </div>
-                    <div class="card-footer text-center">
-                        <a href="../View/ViewReparation.php" class="btn btn-secondary btn-lg">Back to Query</a>
-                    </div>
+
                 </div>
             </div>
         </div>
     </div>
-    <?php
-} else {
-    echo "<div class='alert alert-warning text-center mt-5'>No reparation data found. Please try again.</div>";
-}
-?>
+<?php else: ?>
+    <div class="alert alert-warning text-center mt-5">No reparation data found. Please try again.</div>
+<?php endif; ?>

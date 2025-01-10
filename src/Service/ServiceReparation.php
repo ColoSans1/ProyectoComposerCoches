@@ -34,7 +34,8 @@ class ServiceReparation {
             die("Connection failed: " . $e->getMessage());
         }
     }
-    public function insertReparation($reparation) {
+    public function insertReparation($reparation)
+    {
         $sql = "INSERT INTO reparation 
                 (id_taller, nombre_taller, fecha_registro, matricula_vehiculo, foto_vehiculo)
                 VALUES (:id_taller, :nombre_taller, :fecha_registro, :matricula_vehiculo, :foto_vehiculo)";
@@ -44,13 +45,13 @@ class ServiceReparation {
         $nombreTaller = $reparation->getNombreTaller();
         $fechaRegistro = $reparation->getFechaRegistro();
         $matriculaVehiculo = $reparation->getMatriculaVehiculo();
-        $fotoVehiculo = $reparation->getFotoVehiculo();
+        $fotoVehiculo = $reparation->getFotoVehiculo(); 
     
-        $stmt->bindParam(':id_taller', $idTaller);
-        $stmt->bindParam(':nombre_taller', $nombreTaller);
-        $stmt->bindParam(':fecha_registro', $fechaRegistro);
-        $stmt->bindParam(':matricula_vehiculo', $matriculaVehiculo);
-        $stmt->bindParam(':foto_vehiculo', $fotoVehiculo);
+        $stmt->bindParam(':id_taller', $idTaller, PDO::PARAM_INT);
+        $stmt->bindParam(':nombre_taller', $nombreTaller, PDO::PARAM_STR);
+        $stmt->bindParam(':fecha_registro', $fechaRegistro, PDO::PARAM_STR);
+        $stmt->bindParam(':matricula_vehiculo', $matriculaVehiculo, PDO::PARAM_STR);
+        $stmt->bindParam(':foto_vehiculo', $fotoVehiculo, PDO::PARAM_LOB);
     
         try {
             $result = $stmt->execute();
@@ -60,6 +61,7 @@ class ServiceReparation {
             return false;
         }
     }
+    
     
 }
 
