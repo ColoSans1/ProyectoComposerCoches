@@ -11,45 +11,78 @@ try {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // Insertar una nueva reparación
     if (
-        isset($_POST['car_model'], $_POST['issue_description'], $_POST['repair_date'], $_POST['id_workshop'], $_POST['name_workshop']) &&
+        isset($_POST['car_model'], $_POST['issue_description'], $_POST['repair_date'], $_POST['name_workshop']) &&
         isset($_FILES['photo_url']) && $_FILES['photo_url']['error'] === UPLOAD_ERR_OK
     ) {
-        $licensePlate = !empty($_POST['license_plate']) ? htmlspecialchars($_POST['license_plate']) : 'DEFAULT_VALUE';
-        $photoContent = file_get_contents($_FILES['photo_url']['tmp_name']);
+        $carModel = htmlspecialchars($_POST['car_model']);
+        $issueDescription = htmlspecialchars($_POST['issue_description']);
+        $repairDate = $_POST['repair_date'];  // Validar formato de fecha
+        $workshopName = htmlspecialchars($_POST['name_workshop']);
+        $workshopId = strtoupper(uniqid('WS', true));  // ID de taller único generado
 
+        $licensePlate = !empty($_POST['license_plate']) ? htmlspecialchars($_POST['license_plate']) : 'DEFAULT_VALUE';
+
+        // Verificar si la carga de la foto fue exitosa
+        $photo = $_FILES['photo_url'];
+        if ($photo['error'] !== UPLOAD_ERR_OK) {
+            die("Error al cargar la foto.");
+        }
+
+        $photoContent = file_get_contents($photo['tmp_name']);
+
+        // Crear objeto Reparation
         $reparation = new Reparation(
-            $_POST['id_workshop'],
-            htmlspecialchars($_POST['name_workshop']),
-            $_POST['repair_date'],
+            $workshopId,
+            $workshopName,
+            $repairDate,
             $licensePlate,
             $photoContent
         );
 
-        // Usar el servicio para insertar la reparación
+        // Instancia del servicio para manejar la inserción
         $serviceReparation = new ServiceReparation();
-        if ($serviceReparation->insertReparation($reparation)) {
-            echo "Reparación registrada con éxito.";
+
+        try {
+            if ($serviceReparation->insertReparation($reparation)) {
+                echo "Reparación registrada con éxito.";
+            } else {
+                echo "Error al registrar la reparación.";
+            }
+        } catch (Exception $e) {
+            echo "Error al insertar la reparación: " . $e->getMessage();
+        }
+    } else {
+        echo "Faltan datos para insertar la reparación o error en la carga de archivo.";
+    }
+
+    // Buscar reparación existente
+    if (isset($_POST['action']) && $_POST['action'] === 'getReparation') {
+        if (isset($_POST['reparation_id'])) {
+            $reparationId = $_POST['reparation_id'];
+
+            // Preparar la consulta para obtener la reparación por ID
+            $stmt = $pdo->prepare("SELECT * FROM reparation WHERE id_reparacion = :id_reparacion");
+            $stmt->bindParam(':id_reparacion', $reparationId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $reparation = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($reparation) {
+                // Incluir la vista de la reparación
+                require_once '../View/ViewReparation.php';
+            } else {
+                echo "No se encontró la reparación.";
+            }
         } else {
-            echo "Error al registrar la reparación.";
+            echo "ID de reparación no proporcionado.";
         }
     }
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] === 'getReparation') {
-        $reparationId = $_POST['reparation_id'];
-    
-        $stmt = $pdo->prepare("SELECT * FROM reparation WHERE id_reparacion = :id_reparacion");
-        $stmt->bindParam(':id_reparacion', $reparationId, PDO::PARAM_INT);
-        $stmt->execute();
-    
-        $reparation = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-        if ($reparation) {
-            require_once '../View/ViewReparation.php';
-        } else {
-            echo "No se encontró la reparación.";
-        }
-    }
-    
+} else {
+    echo "Método de solicitud no válido.";
 }
+
 ?>

@@ -15,8 +15,6 @@ class ServiceReparation {
         $config = parse_ini_file(__DIR__ . '/../../db_config.ini');
         if (!$config) {
             die("Error: No se pudo cargar el archivo de configuración.");
-        } else {
-            print_r($config); 
         }
 
         if (!isset($config['servername'], $config['username'], $config['password'], $config['dbname'])) {
@@ -34,8 +32,8 @@ class ServiceReparation {
             die("Connection failed: " . $e->getMessage());
         }
     }
-    public function insertReparation($reparation)
-    {
+
+    public function insertReparation($reparation) {
         $sql = "INSERT INTO reparation 
                 (id_taller, nombre_taller, fecha_registro, matricula_vehiculo, foto_vehiculo)
                 VALUES (:id_taller, :nombre_taller, :fecha_registro, :matricula_vehiculo, :foto_vehiculo)";
@@ -45,7 +43,7 @@ class ServiceReparation {
         $nombreTaller = $reparation->getNombreTaller();
         $fechaRegistro = $reparation->getFechaRegistro();
         $matriculaVehiculo = $reparation->getMatriculaVehiculo();
-        $fotoVehiculo = $reparation->getFotoVehiculo(); 
+        $fotoVehiculo = $reparation->getFotoVehiculo();
     
         $stmt->bindParam(':id_taller', $idTaller, PDO::PARAM_INT);
         $stmt->bindParam(':nombre_taller', $nombreTaller, PDO::PARAM_STR);
@@ -55,6 +53,11 @@ class ServiceReparation {
     
         try {
             $result = $stmt->execute();
+            if ($result) {
+                echo "Reparación insertada correctamente.";
+            } else {
+                echo "La inserción no fue exitosa.";
+            }
             return $result;
         } catch (PDOException $e) {
             echo "Error al ejecutar la consulta: " . $e->getMessage();
@@ -62,7 +65,19 @@ class ServiceReparation {
         }
     }
     
-    
-}
 
+    public function getReparationById($id) {
+        $sql = "SELECT * FROM reparation WHERE id_reparacion = :id_reparacion";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(':id_reparacion', $id, PDO::PARAM_INT);
+        
+        try {
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "Error al ejecutar la consulta: " . $e->getMessage();
+            return null;
+        }
+    }
+}
 ?>

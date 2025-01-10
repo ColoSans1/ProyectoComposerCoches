@@ -57,64 +57,71 @@ $role = isset($_POST['role']) ? $_POST['role'] : '';
                                     <label for="car_model" class="form-label">Car Model:</label>
                                     <input type="text" id="car_model" name="car_model" class="form-control" required>
                                 </div>
+
                                 <div class="mb-3">
                                     <label for="license_plate" class="form-label">License Plate:</label>
-                                    <input type="text" id="license_plate" name="license_plate" class="form-control" required>
+                                    <input type="text" id="license_plate" name="license_plate" class="form-control">
                                 </div>
+
                                 <div class="mb-3">
                                     <label for="issue_description" class="form-label">Issue Description:</label>
                                     <textarea id="issue_description" name="issue_description" class="form-control" rows="4" required></textarea>
                                 </div>
+
                                 <div class="mb-3">
                                     <label for="repair_date" class="form-label">Repair Date:</label>
                                     <input type="date" id="repair_date" name="repair_date" class="form-control" required>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="id_workshop" class="form-label">Workshop ID:</label>
-                                    <input type="text" id="id_workshop" name="id_workshop" class="form-control" required>
-                                </div>
+
                                 <div class="mb-3">
                                     <label for="name_workshop" class="form-label">Workshop Name:</label>
                                     <input type="text" id="name_workshop" name="name_workshop" class="form-control" required>
                                 </div>
+
                                 <div class="mb-3">
                                     <label for="photo_url" class="form-label">Photo Upload:</label>
                                     <input type="file" id="photo_url" name="photo_url" class="form-control" accept="image/*" required>
                                 </div>
+
+                                <!-- Campo oculto para la acción -->
+                                <input type="hidden" name="action" value="insertReparation">
+
                                 <div class="text-center">
-                                    <button type="submit" name="action" value="insertReparation" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
                             </form>
+
                             <div id="insert-confirmation"></div>
                         </div>
                     </div>
                 </div>
-                <br>
+            </div>
 
-                <div class="row justify-content-center">
-                    <div class="col-md-6">
-                        <div class="card shadow">
-                            <div class="card-body">
-                                <h1 class="text-center mb-4">Employee Options</h1>
-                                <p class="text-center">You can only search for your repair.</p>
+            <br>
 
-                                <h3>Reparation Query</h3>
-                                <form id="reparation-query-form" method="POST">
-                                    <div class="mb-3">
-                                        <label for="reparation_id" class="form-label">Reparation ID:</label>
-                                        <input type="text" id="reparation_id" name="reparation_id" class="form-control" required>
-                                    </div>
-                                    <div class="text-center">
-                                        <button type="submit" name="action" value="getReparation" class="btn btn-primary">Search</button>
-                                    </div>
-                                </form>
-                                <div id="reparation-results"></div>
-                            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h1 class="text-center mb-4">Employee Options</h1>
+                            <p class="text-center">You can only search for your repair.</p>
+
+                            <h3>Reparation Query</h3>
+                            <form id="reparation-query-form" method="POST">
+                                <div class="mb-3">
+                                    <label for="reparation_id" class="form-label">Reparation ID:</label>
+                                    <input type="text" id="reparation_id" name="reparation_id" class="form-control" required>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" name="action" value="getReparation" class="btn btn-primary">Search</button>
+                                </div>
+                            </form>
+                            <div id="reparation-results"></div>
                         </div>
                     </div>
                 </div>
-
             </div>
+
         <?php elseif ($role == 'client'): ?>
             <div class="row justify-content-center">
                 <div class="col-md-6">
@@ -143,54 +150,66 @@ $role = isset($_POST['role']) ? $_POST['role'] : '';
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+ 
     <script>
-        $(document).ready(function() {
-            $('#reparation-query-form').on('submit', function(e) {
-                e.preventDefault(); 
+    $(document).ready(function() {
+        $('#reparation-query-form').on('submit', function(e) {
+            e.preventDefault();
 
-                var reparation_id = $('#reparation_id').val();  
+            var reparation_id = $('#reparation_id').val();
 
-                $.ajax({
-                    url: '../src/Controller/ControllerReparation.php',  
-                    type: 'POST',
-                    data: {
-                        action: 'getReparation',  
-                        reparation_id: reparation_id 
-                    },
-                    success: function(response) {
-                        $('#reparation-results').html(response);
-                    },
-                    error: function() {
-                        $('#reparation-results').html('<div class="alert alert-danger">An error occurred while searching.</div>');
-                    }
-                });
-            });
-
-            $('#reparation-insert-form').on('submit', function(e) {
-                e.preventDefault();  
-
-                var car_model = $('#car_model').val();
-                var issue_description = $('#issue_description').val();
-
-                $.ajax({
-                    url: '../src/Controller/ControllerReparation.php', 
-                    type: 'POST',
-                    data: {
-                        action: 'insertReparation',  
-                        car_model: car_model,  
-                        issue_description: issue_description  
-                    },
-                    success: function(response) {
-                        $('#insert-confirmation').html(response);
-                        $('#reparation-insert-form')[0].reset();  
-                    },
-                    error: function() {
-                        $('#insert-confirmation').html('<div class="alert alert-danger">An error occurred while inserting the repair.</div>');
-                    }
-                });
+            $.ajax({
+                url: '../src/Controller/ControllerReparation.php',
+                type: 'POST',
+                data: {
+                    action: 'getReparation',
+                    reparation_id: reparation_id
+                },
+                success: function(response) {
+                    $('#reparation-results').html(response);
+                },
+                error: function() {
+                    $('#reparation-results').html('<div class="alert alert-danger">An error occurred while searching.</div>');
+                }
             });
         });
+
+        $('#reparation-insert-form').on('submit', function(e) {
+            e.preventDefault();
+
+            var car_model = $('#car_model').val();
+            var license_plate = $('#license_plate').val();
+            var issue_description = $('#issue_description').val();
+            var repair_date = $('#repair_date').val();
+            var workshop_name = $('#name_workshop').val();
+            var photo = $('#photo_url')[0].files[0];
+
+            var formData = new FormData();
+            formData.append('action', 'insertReparation');
+            formData.append('car_model', car_model);
+            formData.append('license_plate', license_plate);
+            formData.append('issue_description', issue_description);
+            formData.append('repair_date', repair_date);
+            formData.append('workshop_name', workshop_name);
+            formData.append('photo_url', photo);
+
+            $.ajax({
+                url: '../src/Controller/ControllerReparation.php',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    $('#insert-confirmation').html(response);
+                    $('#reparation-insert-form')[0].reset();
+                },
+                error: function() {
+                    $('#insert-confirmation').html('<div class="alert alert-danger">An error occurred while inserting the repair.</div>');
+                }
+            });
+        });
+    });
     </script>
+
 </body>
 </html>
