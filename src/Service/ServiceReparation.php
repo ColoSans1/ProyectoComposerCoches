@@ -1,6 +1,9 @@
 <?php
 
-require_once __DIR__ . '/../Model/Reparation.php';
+namespace Src\Service;
+
+require_once __DIR__ . '/../../vendor/autoload.php';
+use Src\Model\Reparation;
 
 class ServiceReparation {
     private $connection = null;
@@ -12,72 +15,85 @@ class ServiceReparation {
     }
 
     private function connect() {
-        $config = parse_ini_file(__DIR__ . '/../../db_config.ini');
-        if (!$config) {
-            die("Error: No se pudo cargar el archivo de configuración.");
-        }
-
-        if (!isset($config['servername'], $config['username'], $config['password'], $config['dbname'])) {
-            die("Error: Faltan algunas claves en el archivo de configuración.");
-        }
+        $host = "127.0.0.1";
+        $username = "root";
+        $password = "";
+        $dbname = "Workshop";
 
         try {
-            $this->connection = new PDO(
-                "mysql:host={$config['servername']};dbname={$config['dbname']}",
-                $config['username'],
-                $config['password'],
-                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+            $this->connection = new \PDO(
+                "mysql:host={$host};dbname={$dbname}",
+                $username,
+                $password,
+                [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]
             );
-        } catch (PDOException $e) {
-            die("Connection failed: " . $e->getMessage());
+        } catch (\PDOException $e) {
+            throw new \Exception("Error de conexión: " . $e->getMessage());
         }
     }
 
-    public function insertReparation($reparation) {
+    public function insertReparation(Reparation $reparation): bool {
         $sql = "INSERT INTO reparation 
-                (id_taller, nombre_taller, fecha_registro, matricula_vehiculo, foto_vehiculo)
-                VALUES (:id_taller, :nombre_taller, :fecha_registro, :matricula_vehiculo, :foto_vehiculo)";
+                (uuid, workshopId, workshopName, registerDate, licensePlate, photo)
+                VALUES (:uuid, :workshopId, :workshopName, :registerDate, :licensePlate, :photo)";
+        
         $stmt = $this->connection->prepare($sql);
-    
-        $idTaller = $reparation->getIdTaller();
-        $nombreTaller = $reparation->getNombreTaller();
-        $fechaRegistro = $reparation->getFechaRegistro();
-        $matriculaVehiculo = $reparation->getMatriculaVehiculo();
-        $fotoVehiculo = $reparation->getFotoVehiculo();
-    
-        $stmt->bindParam(':id_taller', $idTaller, PDO::PARAM_INT);
-        $stmt->bindParam(':nombre_taller', $nombreTaller, PDO::PARAM_STR);
-        $stmt->bindParam(':fecha_registro', $fechaRegistro, PDO::PARAM_STR);
-        $stmt->bindParam(':matricula_vehiculo', $matriculaVehiculo, PDO::PARAM_STR);
-        $stmt->bindParam(':foto_vehiculo', $fotoVehiculo, PDO::PARAM_LOB);
-    
+
+        $uuid = $reparation->getUuid();
+        $workshopId = $reparation->getWorkshopId();
+        $workshopName = $reparation->getWorkshopName();
+        $registerDate = $reparation->getRegisterDate();
+        $licensePlate = $reparation->getLicensePlate();
+        $photo = $reparation->getImage();
+
+        $stmt->bindParam(':uuid', $uuid);
+        $stmt->bindParam(':workshopId', $workshopId, \PDO::PARAM_INT);
+        $stmt->bindParam(':workshopName', $workshopName);
+        $stmt->bindParam(':registerDate', $registerDate);
+        $stmt->bindParam(':licensePlate', $licensePlate);
+        $stmt->bindParam(':photo', $photo, \PDO::PARAM_LOB);
+
         try {
             $result = $stmt->execute();
-            if ($result) {
-                echo "Reparación insertada correctamente.";
-            } else {
-                echo "La inserción no fue exitosa.";
-            }
             return $result;
-        } catch (PDOException $e) {
-            echo "Error al ejecutar la consulta: " . $e->getMessage();
-            return false;
+        } catch (\PDOException $e) {
+            throw new \Exception("Error al ejecutar la consulta: " . $e->getMessage());
         }
     }
-    
 
-    public function getReparationById($id) {
-        $sql = "SELECT * FROM reparation WHERE id_reparacion = :id_reparacion";
+    public function getReparationByUuid($uuid): ?Reparation {
+        $sql = "SELECT * FROM reparation WHERE uuid = :uuid";
         $stmt = $this->connection->prepare($sql);
-        $stmt->bindParam(':id_reparacion', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':uuid', $uuid);
         
         try {
             $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            echo "Error al ejecutar la consulta: " . $e->getMessage();
-            return null;
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        
+            if ($row) {
+                $photo = null;
+                if ($row['photo']) {
+                    $photoData = base64_encode($row['photo']);
+                    $photoMime = 'image/jpeg'; // Asegúrate de que el tipo MIME sea correcto
+                    $photo = "data:$photoMime;base64,$photoData";
+                }
+        
+                return new Reparation(
+                    $row["uuid"],
+                    $row["workshopId"],
+                    $row["workshopName"],
+                    $row["registerDate"],
+                    $row["licensePlate"],
+                    $photo
+                );
+            } else {
+                return null;
+            }
+        } catch (\PDOException $e) {
+            throw new \Exception("Error al ejecutar la consulta: " . $e->getMessage());
         }
     }
+    
+    
 }
 ?>

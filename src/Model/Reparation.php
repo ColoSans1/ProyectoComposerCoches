@@ -1,42 +1,46 @@
 <?php
-require_once 'C:\xampp_daw2\htdocs\ProyectoComposerCoches\src\Service\ServiceReparation.php';
+
+namespace Src\Model;
 
 class Reparation {
-    private $id_taller;             
-    private $nombre_taller;          
-    private $fecha_registro;        
-    private $matricula_vehiculo;    
-    private $foto_vehiculo;          
+    private string $uuid;
+    private int $workshopId;
+    private string $workshopName;
+    private string $registerDate;
+    private string $licensePlate;
+    private $image;
 
-    public function __construct($id_taller, $nombre_taller, $fecha_registro, $matricula_vehiculo = '', $foto_vehiculo) {
-        $this->id_taller = $id_taller;
-        $this->nombre_taller = $nombre_taller;
-        $this->fecha_registro = $fecha_registro;
-        $this->matricula_vehiculo = $matricula_vehiculo;
-        $this->foto_vehiculo = $foto_vehiculo;
+    // Modificamos el constructor para que 'workshopId' sea opcional y tenga un valor por defecto
+    public function __construct($uuid, $workshopId = 0, $workshopName, $registerDate, $licensePlate, $photoContent) {
+        $this->uuid = $uuid;
+        $this->workshopId = $workshopId;
+        $this->workshopName = $workshopName;
+        $this->registerDate = $registerDate;
+        $this->licensePlate = $licensePlate;
+        $this->image = $photoContent;
     }
 
-    // Métodos getter actualizados
-    public function getIdTaller() {
-        return $this->id_taller;
+    public function getWorkshopName(): string {
+        return $this->workshopName;
     }
 
-    public function getNombreTaller() {
-        return $this->nombre_taller;
+    public function getWorkshopId(): int {
+        return $this->workshopId;
     }
 
-    public function getFechaRegistro() {
-        return $this->fecha_registro;
+    public function getRegisterDate(): string {
+        return $this->registerDate;
     }
 
-    public function getMatriculaVehiculo() {
-        return $this->matricula_vehiculo;
+    public function getLicensePlate(): string {
+        return $this->licensePlate;
     }
 
-    public function getFotoVehiculo() {
-        return $this->foto_vehiculo;
+    public function getImage() {
+        return $this->image;
     }
 
-
+    public function getUuid(): string {
+        return $this->uuid;
+    }
 }
-?>
