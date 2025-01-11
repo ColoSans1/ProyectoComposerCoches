@@ -73,9 +73,9 @@ class ServiceReparation {
             if ($row) {
                 $photo = null;
                 if ($row['photo']) {
-                    $photoData = base64_encode($row['photo']);
-                    $photoMime = 'image/jpeg'; // Asegúrate de que el tipo MIME sea correcto
-                    $photo = "data:$photoMime;base64,$photoData";
+                    $photoData = base64_encode($row['photo']); 
+                    $photoMime = 'image/jpeg'; 
+                    $photo = "data:$photoMime;base64,$photoData"; 
                 }
         
                 return new Reparation(
@@ -93,7 +93,6 @@ class ServiceReparation {
             throw new \Exception("Error al ejecutar la consulta: " . $e->getMessage());
         }
     }
-    
     
 }
 ?>

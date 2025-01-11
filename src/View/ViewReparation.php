@@ -11,7 +11,7 @@ $reparation = null;
 
 // Verificar si existe el UUID en la URL para obtener la reparación
 if (isset($_GET['uuid'])) {
-    $uuid = htmlspecialchars($_GET['uuid']);
+    $uuid = htmlspecialchars($_GET['uuid']); // Sanitize input
     $reparation = $serviceReparation->getReparationByUuid($uuid);
 }
 ?>
@@ -52,19 +52,20 @@ if (isset($_GET['uuid'])) {
                     <tr><th>Workshop Name</th><td><?= htmlspecialchars($reparation->getWorkshopName()) ?></td></tr>
                     <tr><th>Register Date</th><td><?= htmlspecialchars($reparation->getRegisterDate()) ?></td></tr>
                     <tr><th>License Plate</th><td><?= htmlspecialchars($reparation->getLicensePlate()) ?></td></tr>
-                    <tr>
                     <th>Photo</th>
-<td>
-    <?php if ($reparation->getImage()): ?>
-        <img src="<?= $reparation->getImage() ?>" alt="Vehicle Photo" class="img-fluid rounded" style="max-width: 300px; height: auto;">
-    <?php else: ?>
-        <span class="text-muted">No photo uploaded.</span>
-    <?php endif; ?>
-</td>
-
-                    </tr>
+    <td>
+        <?php if ($reparation->getImage()): ?>
+            <img src="<?= htmlspecialchars($reparation->getImage()) ?>" alt="Vehicle Photo" class="img-fluid rounded" style="max-width: 300px; height: auto;">
+        <?php else: ?>
+            <span class="text-muted">No photo uploaded.</span>
+        <?php endif; ?>
+    </td>
                 </tbody>
             </table>
+        <?php else: ?>
+            <div class="alert alert-warning">
+                No reparation found with the provided UUID.
+            </div>
         <?php endif; ?>
 
         <h2>Register Reparation</h2>

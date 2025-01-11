@@ -36,13 +36,9 @@ class Reparation {
     }
 
     public function getImage() {
-        if ($this->image) {
-            $imageData = base64_encode($this->image);
-            $mimeType = 'image/jpeg'; 
-            return "data:$mimeType;base64,$imageData";
-        }
-        return null;
+        return $this->image;  
     }
+    
 
     public function getUuid(): string {
         return $this->uuid;

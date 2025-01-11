@@ -10,10 +10,10 @@ $serviceReparation = new ServiceReparation();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['insertReparation'])) {
-        $workshopId = htmlspecialchars($_POST['workshopId']);
-        $workshopName = htmlspecialchars($_POST['workshopName']);
-        $registerDate = htmlspecialchars($_POST['registerDate']);
-        $licensePlate = htmlspecialchars($_POST['licensePlate']);
+        $workshopId = $_POST['workshopId'];
+        $workshopName = $_POST['workshopName'];
+        $registerDate = $_POST['registerDate'];
+        $licensePlate = $_POST['licensePlate'];
         $photo = $_FILES['photo'];
 
         if ($photo['error'] === UPLOAD_ERR_OK && validateImage($photo)) {
@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $uuid = strtoupper(uniqid('REP-', true));
 
             $reparation = new Reparation($uuid, $workshopId, $workshopName, $registerDate, $licensePlate, $photoContent);
+
             $serviceReparation->insertReparation($reparation);
 
             header("Location: ../View/viewReparation.php?message=Reparation Registered Successfully");
@@ -32,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['getReparation']) && !empty($_GET['uuid'])) {
-        $uuid = htmlspecialchars($_GET['uuid']);
+        $uuid = $_GET['uuid'];
         $reparation = $serviceReparation->getReparationByUuid($uuid);
 
         if ($reparation) {
@@ -45,7 +46,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+/**
+ * Valida el archivo de imagen.
+ * 
+ * @param array $file El archivo a validar.
+ * @return bool Retorna true si la imagen es válida, false en caso contrario.
+ */
 function validateImage($file): bool {
     $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    return in_array($file['type'], $allowedTypes);
+
+    $maxSize = 2 * 1024 * 1024;
+
+    return in_array($file['type'], $allowedTypes) && $file['size'] <= $maxSize;
 }
