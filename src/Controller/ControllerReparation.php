@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $photoContent = file_get_contents($photo['tmp_name']);
             $uuid = strtoupper(uniqid('REP-', true));
 
-            $reparation = new Reparation($uuid, $workshopId, $workshopName, $registerDate, $licensePlate, base64_encode($photoContent));
+            $reparation = new Reparation($uuid, $workshopId, $workshopName, $registerDate, $licensePlate, $photoContent);
             $serviceReparation->insertReparation($reparation);
 
             header("Location: ../View/viewReparation.php?message=Reparation Registered Successfully");

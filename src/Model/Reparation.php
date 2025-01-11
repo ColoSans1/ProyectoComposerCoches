@@ -10,7 +10,6 @@ class Reparation {
     private string $licensePlate;
     private $image;
 
-    // Modificamos el constructor para que 'workshopId' sea opcional y tenga un valor por defecto
     public function __construct($uuid, $workshopId = 0, $workshopName, $registerDate, $licensePlate, $photoContent) {
         $this->uuid = $uuid;
         $this->workshopId = $workshopId;
@@ -37,7 +36,12 @@ class Reparation {
     }
 
     public function getImage() {
-        return $this->image;
+        if ($this->image) {
+            $imageData = base64_encode($this->image);
+            $mimeType = 'image/jpeg'; 
+            return "data:$mimeType;base64,$imageData";
+        }
+        return null;
     }
 
     public function getUuid(): string {

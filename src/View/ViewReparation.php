@@ -53,15 +53,15 @@ if (isset($_GET['uuid'])) {
                     <tr><th>Register Date</th><td><?= htmlspecialchars($reparation->getRegisterDate()) ?></td></tr>
                     <tr><th>License Plate</th><td><?= htmlspecialchars($reparation->getLicensePlate()) ?></td></tr>
                     <tr>
-                        <th>Photo</th>
-                        <td>
-                            <?php if ($reparation->getImage()): ?>
-                                <img src="data:image/png;base64,<?= htmlspecialchars($reparation->getImage()) ?>" 
-                                     alt="Vehicle Photo" class="img-fluid rounded" style="max-width: 300px; height: auto;">
-                            <?php else: ?>
-                                <span class="text-muted">No photo uploaded.</span>
-                            <?php endif; ?>
-                        </td>
+                    <th>Photo</th>
+<td>
+    <?php if ($reparation->getImage()): ?>
+        <img src="<?= $reparation->getImage() ?>" alt="Vehicle Photo" class="img-fluid rounded" style="max-width: 300px; height: auto;">
+    <?php else: ?>
+        <span class="text-muted">No photo uploaded.</span>
+    <?php endif; ?>
+</td>
+
                     </tr>
                 </tbody>
             </table>
@@ -86,14 +86,10 @@ if (isset($_GET['uuid'])) {
                 <input type="text" name="licensePlate" id="licensePlate" class="form-control" required>
             </div>
             <div class="mb-3">
-                <label for="photo" class="form-label">Photo:</label>
-                <input type="file" name="photo" id="photo" class="form-control" accept="image/*">
+                <label for="photo" class="form-label">Upload Photo:</label>
+                <input type="file" name="photo" id="photo" class="form-control" accept="image/*" required>
             </div>
-            <button type="submit" class="btn btn-success" name="insertReparation">Create</button>
-        </form>
-
-        <form action="../../public/index.php" class="mt-4">
-            <button type="submit" class="btn btn-secondary">Back</button>
+            <button type="submit" class="btn btn-success" name="insertReparation">Submit</button>
         </form>
     </div>
 
