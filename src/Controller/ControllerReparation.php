@@ -53,12 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-/**
- * Valida el archivo de imagen.
- * 
- * @param array $file El archivo a validar.
- * @return bool Retorna true si la imagen es válida, false en caso contrario.
- */
 function validateImage($file): bool {
     $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
 
@@ -67,25 +61,11 @@ function validateImage($file): bool {
     return in_array($file['type'], $allowedTypes) && $file['size'] <= $maxSize;
 }
 
-/**
- * Guarda la imagen temporalmente para su procesamiento.
- *
- * @param string $imageData Contenido binario de la imagen.
- * @param string $uuid ID único de la reparación.
- * @return string Ruta del archivo temporal guardado.
- */
-
 function saveTemporaryImage(string $imageData, string $uuid): string {
     $filePath = "../tmp/{$uuid}.png";
     file_put_contents($filePath, $imageData);
     return $filePath;
 }
-
-/**
- * Aplica un efecto de pixelado a una imagen.
- *
- * @param string $filePath Ruta de la imagen a pixelar.
- */
 
 function pixelateImage(string $filePath): void {
     $image = imagecreatefromstring(file_get_contents($filePath));

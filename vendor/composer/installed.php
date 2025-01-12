@@ -3,7 +3,7 @@
         'name' => 'arnaucolominassans/proyecto-composer-coches',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '9c6c8fbec8774b47fa10a580c6f458b4825fb1cf',
+        'reference' => 'd2b3a3fe545e687cb19e8dfa4f26b4605f8009f3',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'arnaucolominassans/proyecto-composer-coches' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '9c6c8fbec8774b47fa10a580c6f458b4825fb1cf',
+            'reference' => 'd2b3a3fe545e687cb19e8dfa4f26b4605f8009f3',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

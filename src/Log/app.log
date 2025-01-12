@@ -1,0 +1,3 @@
+[2025-01-12 12:34:56] Reparación insertada exitosamente: UUID REP-6783A6EE042638.80389626, Taller: Taller XYZ, Matrícula: 123ABC
+[2025-01-12 12:34:56] Conexión exitosa a la base de datos Workshop en 127.0.0.1
+[2025-01-12 12:50:21] Consulta SELECT fallida: No se encontró reparación con UUID: REP-6783A6EE042638.80389626
